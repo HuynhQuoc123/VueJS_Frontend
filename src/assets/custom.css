@@ -1,0 +1,39 @@
+/* button */
+.btn-black{
+	background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+	color: #fff;
+	padding: 6px 12px;
+    border-radius: 6px;
+	border: none;
+	display: inline-block;
+}
+.btn-black a{
+	color: #fff;
+	text-decoration: none;
+}
+.btn-black:hover{
+	opacity: 0.8;
+}
+.text-a{
+	color: black;
+	text-decoration: none;
+}
+.text-a:hover{
+	color: black;
+	text-decoration: none;
+}
+
+/*datatable*/
+.page-item.active .page-link {
+    background: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+    color: #fff ;
+    border: none;
+    margin: 0 3px;
+    border-radius: 5px;
+}
+.page-item.disabled .page-link {
+    border-radius: 5px;
+}
+.page-link{
+	color: black;
+}
