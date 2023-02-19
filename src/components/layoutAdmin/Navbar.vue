@@ -1,8 +1,7 @@
 <template>
 	<!-- NAVBAR -->
 	<nav>
-		<i class="fa-sharp fa-solid fa-bars"></i>
-		<a href="#" class="nav-link">Categories</a>
+		<i id="menuIcon" class="fa-sharp fa-solid fa-bars p-2"></i>
 		<form action="#">
 			<div class="form-input">
 				<input type="search" placeholder="Search...">
@@ -21,3 +20,8 @@
 	</nav>
 	<!-- NAVBAR -->
 </template>
+<style>
+#menuIcon:hover{
+	cursor: pointer;
+}
+</style>

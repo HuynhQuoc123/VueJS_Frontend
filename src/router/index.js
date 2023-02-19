@@ -17,6 +17,22 @@ const routes = [
         component: () => import('../views/Admin/Dashboard.vue')
       },
       {
+        path: 'producers',
+        name: 'producers',   
+        component: () => import('../views/Admin/Producer/List.vue')    
+      },
+      {
+        path: 'producer/create',
+        name: 'producer.create',   
+        component: () => import('../views/Admin/Producer/Form.vue')    
+      },
+      {
+        path: 'producer/edit/:id',
+        name: 'producer.edit',
+        component: () => import('../views/Admin/Producer/Form.vue')
+      },
+      //category____________________________________________________
+      {
         path: 'categories',
         name: 'categories',   
         component: () => import('../views/Admin/Category/List.vue')    
@@ -31,6 +47,7 @@ const routes = [
         name: 'category.edit',
         component: () => import('../views/Admin/Category/Form.vue')
       },
+      // product__________________________________________________
       {
         path: 'products',
         name: 'product.list',

@@ -1,7 +1,7 @@
 <template>
     <h2 class="text-center pt-5 pb-3">Danh mục sản phẩm</h2>
 
-    <div class="container">
+    <div class="px-5">
 
         <button class="btn-black mb-4">
             <RouterLink to="/admin/category/create" ><i class="fa-sharp fa-solid fa-plus pr-1"></i>
@@ -53,11 +53,14 @@ export default{
     created(){
         this.getCategories();
     },
+    beforeUpdate(){
+        $("#myTable").DataTable().destroy();
 
+    },
     
     methods:{
         getCategories(){
-            axios.get('http://127.0.0.1:8000/api/categories').then(res => {
+            axios.get('categories').then(res => {
                 this.categories = res.data;       
                 setTimeout(() => {
                     $("#myTable").DataTable();
@@ -66,22 +69,25 @@ export default{
         },
         onDelete(categoryID){
             this.$swal.fire({
-                title: 'Do you want to delete?',
+                title: 'Bạn có chắc chắn muốn xóa?',
+                icon: 'warning',
                 showDenyButton: false,
                 showCancelButton: true,
-                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy',
                 }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
-                    axios.delete(`http://127.0.0.1:8000/api/categories/${categoryID}`).then(res=>{
+                    axios.delete(`categories/${categoryID}`).then(res=>{
                         if(res.data.success){
-                            this.$swal.fire('Deleted','','success');
+                            this.$swal.fire('Đã xóa thành công!','','success');
                             this.getCategories();
                         }
                     })
                 }
             })
-        }
+        }      
    
     }
 }

@@ -58,14 +58,14 @@ export default {
         save(){
             this.validate();
             if(this.category.id){
-                axios.put(`http://127.0.0.1:8000/api/categories/${this.category.id}`, this.category).then(res => {
+                axios.put(`categories/${this.category.id}`, this.category).then(res => {
                     if(res.data.success){
                         this.$router.push({name: 'categories'})
                         this.$swal.fire('Đã sửa thành công!','','success');
                     }
                 });
             } else{
-                axios.post('http://127.0.0.1:8000/api/categories', this.category).then(res => {
+                axios.post('categories', this.category).then(res => {
                     if(res.data.success){
                         this.$router.push({name: 'categories'})
                         this.$swal.fire('Đã thêm thành công!','','success');
@@ -75,7 +75,7 @@ export default {
          
         },
         getCategory(categoryId){
-                axios.get(`http://127.0.0.1:8000/api/categories/${categoryId}`).then(res=>{
+                axios.get(`categories/${categoryId}`).then(res=>{
                     this.category = res.data
                 })
             },

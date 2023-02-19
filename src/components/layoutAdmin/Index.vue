@@ -13,11 +13,25 @@
 <script>
 import Sidebar from './Sidebar.vue';
 import Navbar from './Navbar.vue';
+import $ from 'jquery'
 
 export default{
     components:{
         Sidebar,
         Navbar
+    },
+
+    mounted(){
+        $('#menuIcon').click(function(){
+            $('#sidebar').toggleClass('hide');
+        });
+  
     }
+ 
+    
 }
 </script>
+<style scoped>
+    @import "@/assets/admin.css";
+
+</style>

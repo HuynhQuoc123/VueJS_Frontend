@@ -2,10 +2,10 @@
     <!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-            <i class="fa-solid fa-face-smile px-3"></i>
+            <i class="fa-solid fa-face-smile px-4"></i>
             <span class="text">AdminHub</span>
 		</a>
-		<ul class="side-menu top">
+		<ul class="side-menu top p-0">
 			<li class="item">
 					<RouterLink to="/admin/dashboard">
 						<i class="fa-sharp fa-solid fa-gauge px-3"></i>
@@ -13,9 +13,15 @@
 					</RouterLink>
 			</li>
 			<li class="item">
+					<RouterLink to="/admin/producers" >
+						<i class="fa-solid fa-truck px-3"></i>
+						<span class="text">Nhà sản xuất</span>
+					</RouterLink>
+			</li>
+			<li class="item">
 					<RouterLink to="/admin/categories" >
 						<i class="fa-solid fa-boxes-stacked px-3"></i>
-						<span class="text">Danh muc</span>
+						<span class="text">Danh mục</span>
 					</RouterLink>
 			</li>
 			<li class="item">
@@ -25,7 +31,7 @@
 				</RouterLink>
 			</li>
 		</ul>
-		<ul class="side-menu">
+		<ul class="side-menu p-0">
 			<li class="">
 				<a href="#" class="">
 					<i class="fa-solid fa-gear px-3"></i>
