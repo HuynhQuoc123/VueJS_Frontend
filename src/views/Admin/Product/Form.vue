@@ -5,12 +5,22 @@
         <form @submit.prevent="save()">
            <div class="row mt-3">
                 <div class="form-group col-6">
-                    <label class="h6">Tên sản phẩm</label>
-                    <input type="text" v-model="product.name" class="form-control"/>
+                    <label class="h6">Tên danh muc</label>
+                    <!-- <input type="text" v-model="product.id_category" class="form-control"/> -->
+                    <select class="form-select"  v-model="product.id_category">
+                        <option v-for="(category, index) in categories" :key="index" v-bind:value="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group col-6">
                     <label class="h6">Tên nhà sản xuất</label>
-                    <input type="text" v-model="product.id_producer" class="form-control"/>
+                    <!-- <input type="text" v-model="product.id_producer" class="form-control"/> -->
+                    <select class="form-select"  v-model="product.id_producer">
+                        <option v-for="(producer, index) in producers" :key="index" v-bind:value="producer.id">
+                            {{ producer.name }}
+                        </option>
+                    </select>
                 </div>
            </div>
             <div class="row mt-3">
@@ -68,10 +78,14 @@ import axios from 'axios';
                     price:'',
                     quantity: '',
                     image: '',
-                }
+                },
+                categories:[],
+                producers:[]
             }
         },
         created(){
+            this.getCategories();
+            this.getProducers();
             let productID = this.$route.params.id;
             if(productID){
                 this.getProduct(productID);
@@ -113,6 +127,16 @@ import axios from 'axios';
                     this.product = res.data
                 })
             },
+            getCategories(){
+                axios.get('categories').then(res=>{
+                    this.categories = res.data;
+                });
+            },
+            getProducers(){
+                axios.get('producers').then(res=>{
+                    this.producers = res.data;
+                });
+            }
         }
         
     }

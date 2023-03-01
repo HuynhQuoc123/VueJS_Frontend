@@ -3,13 +3,43 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('../components/layoutUser/Index.vue')
+    name: 'index',
+    component: () => import('../components/layoutUser/Index.vue'),
+    children:[
+      {
+        path: '/',
+        name: 'home',   
+        component: () => import('../views/User/Home.vue')
+      },
+      {
+        path: '/products',
+        name: 'products',   
+        component: () => import('../views/User/Product.vue')
+      },
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Auth/Login.vue')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/Auth/Register.vue')
+  },
+  {
+    path: '/admin/login',
+    name: 'admin.login',
+    component: () => import('../views/Admin/LoginAdmin.vue')
   },
 
   {
     path:"/admin",
     component: () => import("../components/layoutAdmin/Index.vue"),
+    meta: {
+      authenticatedAdmin: true
+    },
     children: [
       {
         path: 'dashboard',
@@ -74,5 +104,22 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const adminAuthenticated = localStorage.getItem('tokenAdmin') ? true : false;
+  const userAuthenticated = localStorage.getItem('token') ? true : false;
+
+  if (to.meta.authenticated && !userAuthenticated) {
+      next({ name: 'login'});
+  } else if (to.meta.authenticatedAdmin && !adminAuthenticated) {
+      next({ name: 'admin.login'});
+  } else {
+      next();
+  }
+  
+  
+});
+
+
 
 export default router

@@ -1,14 +1,13 @@
 <template>    
     <div class="card  w-75 mt-5 py-3 px-5 mx-auto">
         <h3 class="mx-auto my-3 pb-2">Danh mục sản phẩm</h3>
-        {{ category }}
-        {{ category.id }}
+     
         <form @submit.prevent="save()">
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label class="h6">Mã danh mục:</label>
                 <input v-model="category.id" type="text" class="form-control"  disabled>
             </div>
-            <div class="form-group">
+            <div class="form-group my-3">
                 <label class="h6">Tên danh mục:</label>
                 <input v-model="category.name" type="text" class="form-control"
                 @blur="validate()"  v-bind:class="{'is-invalid': errors.name}"/>

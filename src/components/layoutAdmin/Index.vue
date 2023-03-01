@@ -32,6 +32,6 @@ export default{
 }
 </script>
 <style scoped>
-    @import "@/assets/admin.css";
+    @import "@/assets/css/admin.css";
 
 </style>

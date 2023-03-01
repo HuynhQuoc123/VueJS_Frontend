@@ -18,8 +18,42 @@
 			<i class="fa-solid fa-user"></i>
 		</a>
 	</nav>
+
+	<h6 v-if="admin" class="m-5">{{ admin }}</h6>
+	
+
 	<!-- NAVBAR -->
 </template>
+
+
+<script>
+import {mapGetters} from 'vuex'
+import axios from 'axios'
+
+export default{
+	async created(){
+        if(localStorage.getItem('tokenAdmin') != null){
+            const res = await axios.get('admin',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
+
+            }
+		})
+		
+		this.$store.dispatch('admin', res.data.data); 
+
+            
+        }      
+    },
+
+
+	computed:{
+        ...mapGetters(['admin'])
+    }
+}
+</script>
+
+
 <style>
 #menuIcon:hover{
 	cursor: pointer;

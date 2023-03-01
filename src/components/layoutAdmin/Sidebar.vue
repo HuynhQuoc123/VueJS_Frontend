@@ -41,7 +41,7 @@
 			<li>
 				<a href="#" class="logout">
                     <i class="fa-solid fa-backward px-3"></i>
-                    <span class="text">Logout</span>
+                    <span class="text" @click="logOut()">Logout</span>
 				</a>
 			</li>
 		</ul>
@@ -55,9 +55,14 @@ import $ from "jquery";
 
 export default{
 	
-	methods: {
-	
-	}
+	methods:{
+		logOut(){
+            localStorage.removeItem('tokenAdmin');
+            this.$store.dispatch('admin', null);
+            // this.$store.dispatch('user', res.data.user);
+
+        },
+	},
 }
 
 </script>

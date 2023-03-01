@@ -1,67 +1,135 @@
 <template>
-           <header class="position-relative">
-            <nav id="mainnav" class="text-white fixed-top d-flex justify-content-around  align-items-center py-2">
-                <div cilass="logo">
-                    <i class="bi bi-music-note-list h2"></i>
-                </div>
-                <div class="menu">
-                    <a class="h6 text-white ">Trang chủ</a>
-                    <a class="h6 text-white px-3">Sản phẩm</a>
-                    <a class="h6 text-white ">Giới thiệu</a>
-                </div>
-                <div class="icon d-flex">
-                    <div class="cart px-3">
-                        <i class="fa-solid fa-cart-shopping"></i>
+           
+            <nav id="mainnav" class=" fixed-top menu-home">
+                <div class="container d-flex justify-content-between align-items-center py-2">
+                    <div cilass="logo">
+                        <i class="bi bi-music-note-list fs-3"></i>
+                     </div>
+                    <div class="menu ">
+                        <RouterLink class="menu-item " to="/">Trang chủ</RouterLink>
+
+                        <RouterLink class="menu-item  px-3" :to="{name: 'products'}">Sản phẩm</RouterLink>
+
+                        <RouterLink class="menu-item " to="/">Giới thiệu</RouterLink>
+                        
+    
                     </div>
-             
-                    <div class="dropdown">                        
-                        <i class="fa-solid fa-user dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                        <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                    <div class="icon d-flex align-items-center">
+                        <div class="cart-wrap px-2">
+                            <div class="cart mt-1">
+                                <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            </div>                        
+                            <div  class="cart-list ">
+                                <h5 class="cart-heading">
+                                        Sản phẩm đã thêm
+                                </h5>
+
+                                <ul class="cart-list-items" v-if="carts.length >0">
+                                        <li :key="index" v-for="(cart, index) in carts" class="cart-item-wrap">
+                                            <img :src="getImage(cart.product.image)" alt="">
+                                            <div class="cart-item-info">
+                                                <div class="cart-item">
+                                                    <h6 class="cart-item-name">{{ cart.product.name }}</h6>
+                                                    <div class="cart-item-price-wrap pt-2">
+                                                        <span class="cart-item-price">{{ cart.product.price }}</span>
+                                                        <span class="cart-item-multiply mx-1">X</span>
+                                                        <span class="cart-item-qnt">{{ cart.quantity }}</span>
+
+                                                        <div>
+                                                            <a href="javascript:void(0)" @click="deleteCart(cart.id)">Xóa</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                
+                                   
+                                        
+                                        
+                                        
+                            
+                                </ul>
+
+                                <div v-if="carts.length == 0" class="text-center pt-4">
+                                    <img src="@/assets/images/empty-cart.jpg" class="w-75 pb-4" alt="">
+                                </div>
+                                
+                                <div v-if="carts.length >0" class="cart-btn text-center pt-1">
+                                    <div class="btn btn-dark mt-2 mb-3">Xem giỏ hàng</div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    
+                
+                        <div class="dropdown">               
+
+                            <div class="px-2 mt-1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-user fs-5" ></i>
+                            </div>
+
+                            <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" v-if="user" href="#">{{ user.name }}</a></li>
+                                <li><a class="dropdown-item" v-if="!user" href="#">hello</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)" @click="LogOut()">logout</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
 
-            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                    <img src="@/assets/images/slider1.jpg" class="d-block w-100" height="700" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>First slide label</h5>
-                        <p>Some representative placeholder content for the first slide.</p>
-                    </div>
-                    </div>
-                    <div class="carousel-item">
-                    <img src="@/assets/images/slider2.jpg" class="d-block w-100" height="700" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p>
-                    </div>
-                    </div>
-                    <div class="carousel-item">
-                    <img src="@/assets/images/slider3.jpg" class="d-block w-100" height="700" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>Third slide label</h5>
-                        <p>Some representative placeholder content for the third slide.</p>
-                    </div>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </header>
+       
 </template>
+
+<script>
+import {mapGetters} from 'vuex'
+import axios from 'axios';
+
+export default{
+    data(){
+        return{
+            carts : []
+        }
+    },
+  
+    async created(){
+        if(localStorage.getItem('tokenUser') != null){
+            const res = await axios.get('user',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('tokenUser')
+
+            }
+            })
+            this.$store.dispatch('user', res.data);  
+            this.getCart(res.data);
+        }      
+    },
+    methods:{
+        LogOut(){
+            localStorage.removeItem('tokenUser');
+            this.$store.dispatch('user', null);
+            // this.$store.dispatch('user', res.data.user);
+
+        },
+        async getCart(user){
+            await axios.get(`cart/${user.id}`).then(res=>{
+                this.carts = res.data
+            })
+        },
+        getImage(image){
+            return 'http://127.0.0.1:8000/storage/uploads/products/'+image;
+        },
+        deleteCart(idCart){
+            axios.delete(`cart/${idCart}`).then(res=>{
+                if(res.data.success){
+                    alert('hello')
+
+                }
+            })
+        }
+    },
+    computed:{
+        ...mapGetters(['user'])
+    }
+}
+</script>
