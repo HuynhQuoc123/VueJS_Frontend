@@ -5,7 +5,8 @@ import {createStore} from 'vuex';
 
 const state = {
     user: null,
-    userId: null
+    userId: null,
+    carts: []
 };
 const store = createStore({
     state,
@@ -18,7 +19,10 @@ const store = createStore({
         },
         userId: (state) => {
             return state.userId;
-        }
+        },
+        carts: (state) => {
+            return state.carts;
+          },
     },
     actions: {
         admin(context, admin) {
@@ -30,6 +34,10 @@ const store = createStore({
         userId(context, userId) {
             context.commit('userId', userId);
         },
+        addProductToCart(context, product) {
+            context.commit('addToCart', product);
+          },
+
     },
     mutations:{
         admin(state, admin) {
@@ -40,7 +48,11 @@ const store = createStore({
         },
         userId(state, userId) {
             state.userId = userId
-        }
+        },
+        addToCart(state, product) {
+            state.carts.push(product);
+          },
+  
     },
 });
 

@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+
+
 const routes = [
-  {
+
+  {    
     path: '/',
     name: 'index',
     component: () => import('../components/layoutUser/Index.vue'),
@@ -15,6 +18,28 @@ const routes = [
         path: '/products',
         name: 'products',   
         component: () => import('../views/User/Product.vue')
+      },
+      {
+        path: '/product/:id',
+        name: 'product.detail',   
+        component: () => import('../views/User/ProductDetail.vue')
+      },
+      
+      {
+        path: '/carts',
+        name: 'carts',   
+        component: () => import('../views/User/CartList.vue')
+      },
+
+      {
+        path: '/checkout',
+        name: 'checkout',   
+        component: () => import('../views/User/Checkout.vue')
+      },
+      {
+        path: '/orderList',
+        name: 'orderList',   
+        component: () => import('../views/User/OrderList.vue')
       },
     ]
   },
@@ -96,7 +121,14 @@ const routes = [
         component: () => import('../views/Admin/Product/Form.vue')
       },
     ]
-  }
+  },
+
+
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: () => import('../components/NotFound.vue')
+  },
 
 ]
 

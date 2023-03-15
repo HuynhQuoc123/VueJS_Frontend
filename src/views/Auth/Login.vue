@@ -33,7 +33,9 @@
 </template>
 
 <script>
+
 import axios from 'axios';
+import Swal from 'sweetalert2'
 export default{
     name:'Login',
     data(){
@@ -48,17 +50,33 @@ export default{
         async handle(){
             const res = await axios.post("login", this.user)
                 if(res.data.success){
-                    this.$swal.fire('Đăng nhập thành công!','','success');
+
                     localStorage.setItem('tokenUser', res.data.token);
                     this.$store.dispatch('user', res.data.user);
-                    this.$router.push({name: 'home'});
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Đăng nhập thành công.'
+                    })
+
+                    this.$router.back();
                 }
             
         }
     }
 }
 </script>
-
 <style scoped>
 
 .wrapper{

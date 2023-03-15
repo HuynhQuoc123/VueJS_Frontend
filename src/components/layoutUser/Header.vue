@@ -23,15 +23,16 @@
                                 <h5 class="cart-heading">
                                         Sản phẩm đã thêm
                                 </h5>
+                            
 
                                 <ul class="cart-list-items" v-if="carts.length >0">
                                         <li :key="index" v-for="(cart, index) in carts" class="cart-item-wrap">
-                                            <img :src="getImage(cart.product.image)" alt="">
+                                            <img :src="getImage(cart.productImage)" alt="">
                                             <div class="cart-item-info">
                                                 <div class="cart-item">
-                                                    <h6 class="cart-item-name">{{ cart.product.name }}</h6>
+                                                    <h6 class="cart-item-name">{{ cart.productName }}</h6>
                                                     <div class="cart-item-price-wrap pt-2">
-                                                        <span class="cart-item-price">{{ cart.product.price }}</span>
+                                                        <span class="cart-item-price">{{ cart.productPrice }}</span>
                                                         <span class="cart-item-multiply mx-1">X</span>
                                                         <span class="cart-item-qnt">{{ cart.quantity }}</span>
 
@@ -39,11 +40,9 @@
                                                             <a href="javascript:void(0)" @click="deleteCart(cart.id)">Xóa</a>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>                                    
                                             </div>
-                                        </li>
-                                
-                                   
+                                        </li>                           
                                         
                                         
                                         
@@ -55,7 +54,9 @@
                                 </div>
                                 
                                 <div v-if="carts.length >0" class="cart-btn text-center pt-1">
-                                    <div class="btn btn-dark mt-2 mb-3">Xem giỏ hàng</div>
+                                        <RouterLink class="btn btn-dark mt-2 mb-3" :to="{name: 'carts', params: {carts: carts}}">
+                                            Xem giỏ hàng
+                                        </RouterLink>
                                 </div>
                                 
                             </div>
@@ -88,7 +89,7 @@ import axios from 'axios';
 export default{
     data(){
         return{
-            carts : []
+            carts : [],
         }
     },
   
@@ -102,18 +103,40 @@ export default{
             })
             this.$store.dispatch('user', res.data);  
             this.getCart(res.data);
+            // this.cart = this.$store.state.carts
+            // console.log(carts)
+
         }      
     },
+
     methods:{
         LogOut(){
             localStorage.removeItem('tokenUser');
             this.$store.dispatch('user', null);
-            // this.$store.dispatch('user', res.data.user);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Đăng xuất thành công.'
+            })
+            
 
         },
         async getCart(user){
             await axios.get(`cart/${user.id}`).then(res=>{
                 this.carts = res.data
+
+                this.$store.dispatch('addProductToCart', res.data);                
             })
         },
         getImage(image){
@@ -129,7 +152,8 @@ export default{
         }
     },
     computed:{
-        ...mapGetters(['user'])
+        ...mapGetters(['user']),    
+        // ...mapGetters(['carts']), 
     }
 }
 </script>
