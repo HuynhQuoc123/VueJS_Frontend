@@ -6,29 +6,30 @@
                 Thêm sản phẩm
             </RouterLink>
         </button>
-        <table  class="myTable table table-bordered bg-white table-hover ">
-            <thead>
-                <tr>
-                    <th>Tên danh mục</th>
-                    <th>Tên nhà sản xuất</th>
+        <table  class="myTable table table-bordered bg-white table-striped table-hover ">
+            <thead >
+                <tr >
+                    <th style="width: 120px;">Tên danh mục</th>
+                    <th style="width: 130px;">Tên nhà sản xuất</th>
                     <th>Tên sản phẩm</th>
                     <th>Giá nhập</th>
                     <th>Giá bán</th>
                     <th>Số lượng</th>
                     <th>Hình ảnh</th>
-                    <th>Tùy chọn</th>
-                    </tr>
+                    <th style="width: 160px;">Tùy chọn</th>
+                    
+                </tr>
             </thead>
             <tbody>
-                <tr :key="index" v-for="(product, index) in products">
+                <tr :key="index" v-for="(product, index) in products" class="align-middle">
                     <td>{{ product.category.name }}</td>
                     <td>{{ product.producer.name }}</td>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.import_price }}</td>
-                    <td>{{ product.price }}</td>
+                    <td>{{ formatPrice(product.import_price) }}</td>
+                    <td>{{ formatPrice(product.price) }}</td>
                     <td>{{ product.quantity }}</td>
-                    <td class="text-center">
-                        <img :src="getImage(product.image)" width="100" alt="">
+                    <td class="text-center ">
+                        <img class="border rounded" :src="getImage(product.image)" width="100" alt="">
                     </td>
                     <td>
                         <button class="btn btn-warning mr-1">
@@ -36,14 +37,10 @@
                                 <i class="fa-solid fa-pen pr-1"></i>
                                 Edit
                             </RouterLink>
-                        </button>
-                        
-                        <button class="btn btn-danger"  @click="onDelete(product.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
+                        </button>                        
+                        &nbsp
+                        <button class="btn btn-danger "  @click="onDelete(product.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
                     </td>
-
-
-
-
                 </tr>
             </tbody>
         </table>
@@ -100,7 +97,11 @@ export default{
                 }
             })
 
-        }
+        },
+        formatPrice(value) {
+            let val = (value / 1).toFixed(0).replace('.', ',');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        },
     }
 }
 </script>

@@ -14,8 +14,8 @@
                                 contacts[0].phone }}</span>:
                             <i class="px-1">
                                 {{ selectedContact.address || contacts[0].address }}, {{ selectedContact.ward ||
-                                    contacts[0].ward }}, {{ selectedContact.district || contacts[0].district }}, {{
-        selectedContact.city || contacts[0].city }}
+                                    contacts[0].ward }}, {{ selectedContact.district || contacts[0].district }},
+                                     {{selectedContact.city || contacts[0].city }}
                             </i>
                         <div class="px-3 pointer text-primary" @click="showModal = true">Thay đổi</div>
                         </p>
@@ -134,7 +134,6 @@
                                 <div>{{ formatPrice(this.total) }}</div>
                                 <div>{{ formatPrice(ship) }}</div>
                                 <div>{{ formatPrice(order.total) }}</div>
-                                <div>{{ totalUSD }}</div>
                                 <div class="mt-3 ">
                                     <button @click="handleClick(customer_id)" class="btn btn-black">Đặt hàng</button>
                                 </div>
@@ -167,7 +166,7 @@ export default {
             showAddAddressModal: false,
             selectedContact: [],
             contacts: [],
-            ship: 1,
+            ship: 55000,
             total: 0,
             totalUSD: 0,
             customer_id: '',
@@ -242,7 +241,7 @@ export default {
         },
         handleClick(id) {
             if (this.paidFor) {
-                this.order.payments = "Đã thanh toán qua paypal"
+                this.order.payments = "Đã thanh toán"
             }
             axios.post(`/order/${id}`, this.order).then(res => {
                 if (res.data.success) {
@@ -268,6 +267,7 @@ export default {
             })
                 .catch(error => {
                     console.log(error);
+                    console.log(order)
                 });
         },
         async getCart(user) {

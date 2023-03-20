@@ -6,7 +6,7 @@
                 Thêm nhà sản xuất
             </RouterLink>
         </button>
-       <table class="myTable table table-bordered bg-white table-hover">
+       <table class="myTable table-striped  table table-bordered bg-white table-hover">
             <thead class="">
                 <tr>
                     <th>STT</th>
@@ -29,6 +29,7 @@
                                 Edit
                             </RouterLink>
                         </button>
+                        &nbsp
                         <button class="btn btn-danger"  @click="onDelete(producer.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
                     </td>
                 </tr>

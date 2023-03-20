@@ -70,7 +70,7 @@ export default{
                         title: 'Đăng nhập thành công.'
                     })
 
-                    this.$router.back();
+                    this.$router.push('/');
                 }
             
         }

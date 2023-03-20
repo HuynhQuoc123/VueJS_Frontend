@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import store from '../vuex'
 
 
 const routes = [
@@ -71,6 +72,21 @@ const routes = [
         name: 'dashboard',   
         component: () => import('../views/Admin/Dashboard.vue')
       },
+      //employee
+      {
+        path: 'employees',
+        name: 'employees',   
+        component: () => import('../views/Admin/Employee/List.vue'),
+  
+      },
+      {
+        path: 'employee/create',
+        name: 'employee.create',   
+        component: () => import('../views/Admin/Employee/Form.vue'),
+  
+      },
+
+      // producer__________________________________________________
       {
         path: 'producers',
         name: 'producers',   
@@ -120,6 +136,17 @@ const routes = [
         name: 'product.edit',
         component: () => import('../views/Admin/Product/Form.vue')
       },
+      // order__________________________________________________
+      {
+        path: 'orders',
+        name: 'order.list',    
+        component: () => import('../views/Admin/Order/List.vue')
+      },
+      {
+        path: 'orderDetail/:id',
+        name: 'order.detail',    
+        component: () => import('../views/Admin/Order/OrderDetail.vue')
+      },
     ]
   },
 
@@ -140,6 +167,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const adminAuthenticated = localStorage.getItem('tokenAdmin') ? true : false;
   const userAuthenticated = localStorage.getItem('token') ? true : false;
+
 
   if (to.meta.authenticated && !userAuthenticated) {
       next({ name: 'login'});

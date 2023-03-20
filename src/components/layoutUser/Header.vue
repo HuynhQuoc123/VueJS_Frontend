@@ -71,8 +71,11 @@
 
                             <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item" v-if="user" href="#">{{ user.name }}</a></li>
-                                <li><a class="dropdown-item" v-if="!user" href="#">hello</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0)" @click="LogOut()">logout</a></li>
+                                <li><RouterLink class="dropdown-item" to="/orderList" v-if="user" >Đơn mua</RouterLink></li>
+                                <li><a class="dropdown-item" v-if="user" href="javascript:void(0)" @click="LogOut()">Đăng xuất</a></li>
+                                <li><RouterLink class="dropdown-item" to="/register" v-if="!user" >Đăng ký</RouterLink></li>
+                                <li><RouterLink class="dropdown-item" to="/login" v-if="!user" >Đăng nhập</RouterLink></li>
+
                             </ul>
                         </div>
                     </div>
@@ -103,8 +106,7 @@ export default{
             })
             this.$store.dispatch('user', res.data);  
             this.getCart(res.data);
-            // this.cart = this.$store.state.carts
-            // console.log(carts)
+    
 
         }      
     },
@@ -113,23 +115,7 @@ export default{
         LogOut(){
             localStorage.removeItem('tokenUser');
             this.$store.dispatch('user', null);
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
-
-            Toast.fire({
-                icon: 'success',
-                title: 'Đăng xuất thành công.'
-            })
-            
+            this.$router.push('login')
 
         },
         async getCart(user){
@@ -153,7 +139,6 @@ export default{
     },
     computed:{
         ...mapGetters(['user']),    
-        // ...mapGetters(['carts']), 
     }
 }
 </script>

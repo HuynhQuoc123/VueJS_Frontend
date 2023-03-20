@@ -1,34 +1,41 @@
 <template>
-    <div class="container-md pt-2">
-        <div class="row mt-5">
-            <div class="col-xl-3 col-lg-4 col-md-5">
+    <div class="container-md pb-5">
+        <div class="row mt-4">
+            <div class="col-xl-3 col-lg-4 col-md-5 mt-3">
                 <div class="bg-white p-3 shadow-sm">
                     <div class="catgory">
                         <h6>Danh mục</h6>
                         <hr class="my-1">
                         <ul class="category-list mt-3">
-                            <li class="category-item">Guitar</li>
-                            <li class="category-item">Piano</li>
-                            <li class="category-item">Trống</li>
+                            <li @click="getProducts()" class="pointer">
+                                Tất cả
+                            </li>
+                            <li v-for="(category, index) in categories" :key="index" 
+                            @click="productBelongCategory(category.id)" class="category-item pointer">
+                                {{  category.name }}
+                            </li>                     
                         </ul>
                     </div>
 
                     <div class="producer mt-5">
                         <h6>Nhà sản xuất</h6>
                         <hr class="my-1">
-                        <ul class="category-list mt-3">
-                            <li class="category-item">Guitar</li>
-                            <li class="category-item">Piano</li>
-                            <li class="category-item">Trống</li>
-                            <!-- {{ products }} -->
+                        <ul class="producer-list mt-3">
+                            <li @click="getProducts()" class="pointer">
+                                Tất cả
+                            </li>
+                            <li v-for="(producer, index) in producers" 
+                            @click="productBelongProducer(producer.id)" class="producer-item pointer">
+                                {{ producer.name }}
+                            </li>       
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-xl-9 col-lg-8 col-md-7">
                 <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-6" v-for="(product, index) in products" :key="index">
-                        <div class="product-item">
+                    <div class="col-xl-4 col-lg-4 col-md-6" v-for="(product, index) in  products" :key="index">
+                        <div class="product-item mt-3">
                             <RouterLink :to="{name: 'product.detail', params: {id: product.id}}">
 
                                 <div class="position-relative bg-light overflow-hidden">
@@ -59,12 +66,24 @@
 
 
                 </div>
+                <!-- <div>
+                    <paginate
+                    v-model="currentPage"
+                    :page-count="Math.ceil(products.length/perPage)"
+                    :click-handler="paginateHandler"
+                    :prev-text="'Prev'"
+                    :next-text="'Next'"
+                 
+                    />
+                </div> -->
             </div>
          
            
             
         </div>
+
     </div>
+   
     
 
       
@@ -78,27 +97,35 @@
 import axios from 'axios';
 import {mapGetters} from 'vuex'
 import Swal from 'sweetalert2'
+import {paginate} from 'vuejs-paginate'
 
 
 
 export default{
+    components: {
+        paginate
+    },
     data(){
         return{
             products: [],
+            categories: [],
+            producers: [],
+            currentPage: 1, // trang hiện tại
+            // perPage: 3, // số sản phẩm trên mỗi trang
             cart:{
                 product_id: '',
                 quantity  :1
-            }
+            },
 
             
         }
     
     },
-    computed:{
-        ...mapGetters(['user'])
-    },
+
     created(){
-        this.getProducts()
+        this.getProducts();
+        this.getCategories();
+        this.getProducer();
     },
     methods:{
         getProducts(){
@@ -107,7 +134,27 @@ export default{
              
             })
         },    
-        
+        getCategories(){
+            axios.get('categories').then(res =>{
+                this.categories = res.data;
+            })
+        },
+        productBelongCategory($id){
+            axios.get(`categories/${$id}`).then(res =>{
+                this.products = res.data.products
+            })
+        },
+        getProducer(){
+            axios.get('producers').then(res =>{
+                this.producers = res.data;
+            })
+        },
+        productBelongProducer($id){
+            axios.get(`producers/${$id}`).then(res =>{
+                this.products = res.data.products
+            })
+        },
+
         getImage(image){
             return 'http://127.0.0.1:8000/storage/uploads/products/'+image;
         },
@@ -144,13 +191,27 @@ export default{
             }
        
         },
-
+        // paginateHandler: function(page) {
+        //     this.currentPage = page;
+        // },
         formatPrice(value) {
           let val = (value/1).toFixed(0).replace('.', ',') ;
           return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         },   
     },
-    
+    computed: {
+        ...mapGetters(['user']),
+        // paginatedProducts: function() {
+        //     let start = (this.currentPage - 1) * this.perPage;
+        //     let end = start + this.perPage;
+        //     return this.products.slice(start, end);
+        // },
+        // pageCount: function() {
+        //     return Math.ceil(this.products.length / this.perPage);
+        // },
+ 
+
+    }
 }
 </script>
 

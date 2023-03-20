@@ -43,7 +43,8 @@ import axios from 'axios';
 export default{
   data(){
     return{
-      product: []
+      product: [],
+      selectedImage: ''
     }
   },
   created(){

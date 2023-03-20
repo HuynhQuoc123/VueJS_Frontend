@@ -10,7 +10,7 @@
         </button>
 
 
-        <table id="myTable" class="table table-bordered bg-white table-hover ">
+        <table id="myTable" class="table table-striped  table-bordered bg-white table-hover ">
             <thead class="">
                 <tr>
                     <th style="width: 30px;">STT</th>
@@ -29,7 +29,7 @@
                                 Edit
                             </RouterLink>
                         </button>
-                        
+                        &nbsp
                         <button class="btn btn-danger"  @click="onDelete(category.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
                     </td>
                 </tr>
@@ -59,8 +59,8 @@ export default{
     },
     
     methods:{
-        getCategories(){
-            axios.get('categories').then(res => {
+        async getCategories(){
+            await axios.get('categories').then(res => {
                 this.categories = res.data;       
                 setTimeout(() => {
                     $("#myTable").DataTable();
