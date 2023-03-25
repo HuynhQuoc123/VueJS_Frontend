@@ -10,7 +10,7 @@
             </button>
 
 
-            <table class="myTable table-striped  table table-bordered bg-white table-hover ">
+            <table class="myTable table table-bordered bg-white table-striped table-hover ">
                 <thead class="">
                     <tr>
                         <th>Tên nhân viên</th>
@@ -61,15 +61,13 @@ export default {
 		this.admin = res.data;
     }
     },
-    beforeUpdate(){
-        $('.myTable').DataTable().destroy();
-    },
+
     methods:{
         async getEmployees(){
             await axios.get('allEmployee').then(res=>{
                 this.employees = res.data;
                 setTimeout(() => {
-                    $(".myTable").DataTable();
+                    $("#myTable").DataTable();
                 }, 100)
             })
         }

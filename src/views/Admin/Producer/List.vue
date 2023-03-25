@@ -61,7 +61,24 @@ export default{
             axios.get('producers').then(res => {
                 this.producers = res.data;
                 setTimeout(() =>{
-                    $('.myTable').DataTable();
+                    $('.myTable').DataTable({
+                        "language": {
+                            "search": "Tìm kiếm:",
+                            "searchPlaceholder": "Tìm kiếm",
+                            "loadingRecords": "Đang tải...",
+                            "zeroRecords": "Không tìm thấy kết quả",
+                            "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                            "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                            "paginate": {
+                                "first": "Trang đầu",
+                                "last": "Trang cuối",
+                                "next": "Trang sau",
+                                "previous": "Trang trước"
+                            }
+                        },
+                        "lengthMenu": [5, 10, 25, 50],
+                        "pageLength": 5
+                    });
                 }, 100);
             });
         },

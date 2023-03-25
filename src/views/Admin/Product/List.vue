@@ -9,37 +9,43 @@
         <table  class="myTable table table-bordered bg-white table-striped table-hover ">
             <thead >
                 <tr >
-                    <th style="width: 120px;">Tên danh mục</th>
-                    <th style="width: 130px;">Tên nhà sản xuất</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá nhập</th>
-                    <th>Giá bán</th>
-                    <th>Số lượng</th>
+                    <th >Danh mục</th>
+                    <th >Nhà sản xuất</th>
+                    <th >Tên sản phẩm</th>
+                    <th >Giá nhập</th>
+                    <th >Giá bán</th>
+                    <th >Số lượng</th>
                     <th>Hình ảnh</th>
-                    <th style="width: 160px;">Tùy chọn</th>
+                    <th style="width: 170px;">Tùy chọn</th>
                     
                 </tr>
             </thead>
             <tbody>
                 <tr :key="index" v-for="(product, index) in products" class="align-middle">
-                    <td>{{ product.category.name }}</td>
-                    <td>{{ product.producer.name }}</td>
+                    <td>{{ product.categoryName }}</td>
+                    <td>{{ product.producerName }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ formatPrice(product.import_price) }}</td>
                     <td>{{ formatPrice(product.price) }}</td>
                     <td>{{ product.quantity }}</td>
                     <td class="text-center ">
+
                         <img class="border rounded" :src="getImage(product.image)" width="100" alt="">
+
                     </td>
-                    <td>
-                        <button class="btn btn-warning mr-1">
+                    <td >
+                        <button class="btn btn-warning">
                             <RouterLink class="text-a" :to="{name: 'product.edit', params: {id: product.id}}">
                                 <i class="fa-solid fa-pen pr-1"></i>
-                                Edit
+                                
                             </RouterLink>
                         </button>                        
-                        &nbsp
-                        <button class="btn btn-danger "  @click="onDelete(product.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
+                        <button class="btn btn-danger mx-1"  @click="onDelete(product.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i></button>
+                        <button class="btn btn-secondary">
+                            <RouterLink :to="{name: 'admin.product.detail', params: {id: product.id}}">
+                            <i class="fa-solid fa-eye"></i>
+                            </RouterLink>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -54,13 +60,15 @@ import $ from 'jquery';
 export default{
     name: 'ProductsList',
     data(){
-        return{
-            products:[]
+        return {
+            products: [],
+           
         }
     },
     created(){
         this.getProducts();
     },
+  
     beforeUpdate(){
         $(".myTable").DataTable().destroy();
     },
@@ -72,8 +80,25 @@ export default{
             axios.get('products').then(res => {
                 this.products = res.data;
                 setTimeout(() => {
-                    $(".myTable").DataTable();
-                }, 100)
+                    $(".myTable").DataTable({
+                        "language": {
+                            "search": "Tìm kiếm:",
+                            "searchPlaceholder": "Tìm kiếm",
+                            "loadingRecords": "Đang tải...",
+                            "zeroRecords": "Không tìm thấy kết quả",
+                            "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                            "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                            "paginate": {
+                                "first": "Trang đầu",
+                                "last": "Trang cuối",
+                                "next": "Trang sau",
+                                "previous": "Trang trước"
+                            }
+                        },
+                        "lengthMenu": [5, 10, 25, 50],
+                        "pageLength": 5
+                    });
+                }, 100);
             })
         },
         onDelete(productID){

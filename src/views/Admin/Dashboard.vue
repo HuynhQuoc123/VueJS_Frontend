@@ -42,7 +42,7 @@
 					<i class="bx fa-solid fa-comments-dollar"></i>
 					<span class="text">				   
 						<h3>
-							{{formatPrice(revenue)}}
+							{{ formatPrice(revenue) }}
 						</h3>
 						<p>Tổng doanh thu</p>
 					</span>
@@ -130,7 +130,8 @@ export default{
 				}
 			}
 			return sum;
-		}
+		},
+
 
 		
 	}

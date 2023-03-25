@@ -1,7 +1,7 @@
 <template>
     <!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="#" class="brand">
+		<a href="/admin/dashboard" class="brand">
             <i class="fa-solid fa-face-smile px-4"></i>
             <span class="text">MyShop</span>
 		</a>
@@ -14,7 +14,7 @@
 			</li>
 			<li class="item" v-if="admin.id_role == 1">
 					<RouterLink to="/admin/employees" >
-						<i class="fa-solid fa-truck px-3"></i>
+						<i class="fa-solid fa-users px-3"></i>
 						<span class="text">Nhân viên</span>
 					</RouterLink>
 			</li>

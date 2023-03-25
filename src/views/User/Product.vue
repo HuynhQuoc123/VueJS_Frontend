@@ -34,7 +34,7 @@
             </div>
             <div class="col-xl-9 col-lg-8 col-md-7">
                 <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-6" v-for="(product, index) in  products" :key="index">
+                    <div class="col-xl-4 col-lg-4 col-md-6" v-for="(product, index) in  displayedProducts" :key="index">
                         <div class="product-item mt-3">
                             <RouterLink :to="{name: 'product.detail', params: {id: product.id}}">
 
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="text-center p-3">
                                     <span class="d-block h6 mb-2">{{ product.name }}</span>
-                                    <span class=" me-1">{{ formatPrice(product.price) }} <small>vnđ</small></span>
+                                    <span class=" me-1">{{ formatPrice(product.price) }} <small>đ</small></span>
                                     
                                 </div>
                             </RouterLink>
@@ -61,27 +61,44 @@
                             </div>
                         </div>
                     </div>    
-
-
-
-
                 </div>
-                <!-- <div>
-                    <paginate
-                    v-model="currentPage"
-                    :page-count="Math.ceil(products.length/perPage)"
-                    :click-handler="paginateHandler"
-                    :prev-text="'Prev'"
-                    :next-text="'Next'"
-                 
-                    />
-                </div> -->
+      
             </div>
          
            
             
         </div>
-
+        <div class="me-3 mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="pagination justify-content-end">
+                        <li class="page-item" :class="{ disabled: currentPage <= 1 }">
+                            <a class="page-link" href="#" @click.prevent="currentPage = 1">
+                                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="page-item" :class="{ disabled: currentPage <= 1 }">
+                            <a class="page-link" href="#" @click.prevent="currentPage--">
+                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="page-item" v-for="pageNumber in totalPages" :key="pageNumber" :class="{ active: currentPage === pageNumber }">
+                            <a class="page-link" href="#" @click.prevent="currentPage = pageNumber">{{ pageNumber }}</a>
+                        </li>
+                        <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                            <a class="page-link" href="#" @click.prevent="currentPage++">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                            <a class="page-link" href="#" @click.prevent="currentPage = totalPages">
+                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
    
     
@@ -97,77 +114,92 @@
 import axios from 'axios';
 import {mapGetters} from 'vuex'
 import Swal from 'sweetalert2'
-import {paginate} from 'vuejs-paginate'
 
 
 
-export default{
-    components: {
-        paginate
-    },
-    data(){
-        return{
+export default {
+
+    data() {
+        return {
             products: [],
             categories: [],
             producers: [],
-            currentPage: 1, // trang hiện tại
-            // perPage: 3, // số sản phẩm trên mỗi trang
-            cart:{
+            cart: {
                 product_id: '',
-                quantity  :1
+                quantity: 1
             },
+            currentPage: 1,
+            itemsPerPage: 6,
 
-            
+
         }
-    
+
     },
 
-    created(){
+    computed: {
+        totalPages() {
+            return Math.ceil(this.products.length / this.itemsPerPage);
+        },
+        displayedProducts() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            return this.products.slice(start, end);
+        },
+        ...mapGetters(['user']),
+
+    },
+
+    created() {
         this.getProducts();
         this.getCategories();
         this.getProducer();
     },
-    methods:{
-        getProducts(){
+    methods: {
+        getProducts() {
             axios.get('products').then(res => {
                 this.products = res.data;
-             
+
             })
-        },    
-        getCategories(){
-            axios.get('categories').then(res =>{
+        },
+        getCategories() {
+            axios.get('categories').then(res => {
                 this.categories = res.data;
             })
         },
-        productBelongCategory($id){
-            axios.get(`categories/${$id}`).then(res =>{
+        productBelongCategory($id) {
+            axios.get(`categories/${$id}`).then(res => {
                 this.products = res.data.products
             })
         },
-        getProducer(){
-            axios.get('producers').then(res =>{
+        getProducer() {
+            axios.get('producers').then(res => {
                 this.producers = res.data;
             })
         },
-        productBelongProducer($id){
-            axios.get(`producers/${$id}`).then(res =>{
+        productBelongProducer($id) {
+            axios.get(`producers/${$id}`).then(res => {
                 this.products = res.data.products
             })
         },
 
-        getImage(image){
-            return 'http://127.0.0.1:8000/storage/uploads/products/'+image;
+        getImage(image) {
+            return 'http://127.0.0.1:8000/storage/uploads/products/' + image;
         },
-        
-        async addToCart(productID){
+        getCart(user){
+            axios.get(`cart/${user.id}`).then(res=>{
+                this.$store.dispatch('addProductToCart', res.data);                
+            })
+        },     
+        async addToCart(productID) {
             console.log(this.user.id)
-            if(localStorage.getItem('tokenUser') == null){
-                this.$router.push({name: 'login'});                
+            if (localStorage.getItem('tokenUser') == null) {
+                this.$router.push({ name: 'login' });
             }
             else {
                 this.cart.product_id = productID;
                 await axios.post(`cart/${this.user.id}`, this.cart).then(res => {
                     if (res.data.success) {
+
                         const Toast = Swal.mixin({
                             toast: true,
                             position: 'top',
@@ -184,34 +216,26 @@ export default{
                             icon: 'success',
                             title: 'Đã thêm thành công'
                         })
+                        
+                        axios.get(`cart/${this.user.id}`).then(res => {  
+                            this.$store.commit('addToCart', res.data);                         
+                        })
 
                     }
                 })
-
             }
-       
         },
-        // paginateHandler: function(page) {
-        //     this.currentPage = page;
-        // },
-        formatPrice(value) {
-          let val = (value/1).toFixed(0).replace('.', ',') ;
-          return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-        },   
-    },
-    computed: {
-        ...mapGetters(['user']),
-        // paginatedProducts: function() {
-        //     let start = (this.currentPage - 1) * this.perPage;
-        //     let end = start + this.perPage;
-        //     return this.products.slice(start, end);
-        // },
-        // pageCount: function() {
-        //     return Math.ceil(this.products.length / this.perPage);
-        // },
- 
 
-    }
+        changePage(pageNumber) {
+            this.currentPage = pageNumber;
+        },
+
+        formatPrice(value) {
+            let val = (value / 1).toFixed(0).replace('.', ',');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        },
+     
+    },
 }
 </script>
 

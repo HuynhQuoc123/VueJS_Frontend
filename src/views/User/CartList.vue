@@ -35,19 +35,18 @@
                             <i class="fas fa-minus"></i>
                           </button>
 
-                          <input id="form1" min="0" name="quantity" v-model="cart.quantity" type="number"
+                          <input id="form1" min="1" name="quantity" v-model="cart.quantity" type="number"
                             class="form-control form-control-sm w-50 " />
-
                           <button class="btn btn-link px-2"
                             onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                             <i class="fas fa-plus"></i>
                           </button>
                         </div>
                         <div class="cart-price">
-                          <span>{{ formatPrice(cart.productPrice) }} vnd</span>
+                          <span>{{ formatPrice(cart.productPrice) }}đ</span>
                         </div>
                         <div>
-                          <a href="#!"><i class="fas fa-trash-alt"></i></a>
+                          <span class="pointer" @click="deleteCart(cart.id)"><i class="fas fa-trash-alt"></i></span>
                         </div>
                       </div>
                     </div>
@@ -61,7 +60,7 @@
                   <div class="p-3 bg-light bg-opacity-10">
                     <h6 class="card-title mb-3">Tổng sản phẩm</h6>
                     <div class="d-flex justify-content-between mb-1 small">
-                      <span>Tổng tiền:</span> <b>{{ formatPrice(this.total) }} vnd</b>
+                      <span>Tổng tiền:</span> <b>{{ formatPrice(calculateTotal(carts))  }} vnd</b>
                     </div>
                     <div class="d-flex justify-content-between mb-1 small">
                       <span>Phí giao hàng:</span> <span>0 vnd</span>
@@ -71,7 +70,7 @@
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between mb-4 small">
-                      <span>Tổng thanh toán:</span> <strong class="text-dark">{{ formatPrice(calculateTotal(carts.flat())) }} vnd</strong>
+                      <span>Tổng thanh toán:</span> <strong class="text-dark">{{ formatPrice(calculateTotal(carts)) }} vnd</strong>
                     </div>
          
                     <div class="text-center">
@@ -88,7 +87,6 @@
       </div>
     </div>
   </div>
-  
 </section>
 
 
@@ -97,39 +95,32 @@
 </template>
 
 <script>
-
-import axios from 'axios';
 import {mapGetters} from 'vuex'
+import axios from 'axios';
 
 export default {
   data() {
-    return {
-      carts:[],
-      total: 0
-    }
-  },
-
-  async created() {
-    if (localStorage.getItem('tokenUser') != null) {
-      const res = await axios.get('user', {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('tokenUser')
-
-        }
-      })
-      this.getCart(res.data);
+    return {    
 
     }
-
   },
+ 
 
   methods: {
     async getCart(user) {
       await axios.get(`cart/${user.id}`).then(res => {
-        this.carts = res.data
-        this.total = this.calculateTotal(this.carts);
+        this.$store.commit('addToCart', res.data);
+
       })
     },
+    deleteCart(idCart) {
+      axios.delete(`cart/${idCart}`).then(res => {
+        if (res.data.success) {
+          this.getCart(this.user);
+        }
+      })
+    },
+
     calculateTotal(items) {
       let sum = 0;
       for (let i = 0; i < items.length; i++) {
@@ -140,19 +131,16 @@ export default {
     getImage(image) {
       return 'http://127.0.0.1:8000/storage/uploads/products/' + image;
     },
-    deleteCart(idCart) {
-      axios.delete(`cart/${idCart}`).then(res => {
-        if (res.data.success) {
-          alert('hello')
 
-        }
-      })
-    },
 
     formatPrice(value) {
       let val = (value / 1).toFixed(0).replace('.', ',');
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     },
+  },
+  computed: {
+    ...mapGetters(['user']),
+    ...mapGetters(['carts']),
   }
 }
 </script>

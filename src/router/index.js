@@ -132,6 +132,12 @@ const routes = [
         component: () => import('../views/Admin/Product/Form.vue')
       },
       {
+        path: 'product/detail/:id',
+        name: 'admin.product.detail',
+    
+        component: () => import('../views/Admin/Product/Detail.vue')
+      },
+      {
         path: 'product/edit/:id',
         name: 'product.edit',
         component: () => import('../views/Admin/Product/Form.vue')

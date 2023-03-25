@@ -22,7 +22,7 @@ const store = createStore({
         },
         carts: (state) => {
             return state.carts;
-          },
+        },
     },
     actions: {
         admin(context, admin) {
@@ -49,9 +49,9 @@ const store = createStore({
         userId(state, userId) {
             state.userId = userId
         },
-        addToCart(state, product) {
-            state.carts.push(product);
-          },
+        addToCart(state, items) {
+            state.carts = items;
+        },
   
     },
 });

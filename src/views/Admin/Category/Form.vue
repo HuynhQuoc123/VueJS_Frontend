@@ -3,10 +3,7 @@
         <h3 class="mx-auto my-3 pb-2">Danh mục sản phẩm</h3>
      
         <form @submit.prevent="save()">
-            <div class="form-group mt-3">
-                <label class="h6">Mã danh mục:</label>
-                <input v-model="category.id" type="text" class="form-control"  disabled>
-            </div>
+
             <div class="form-group my-3">
                 <label class="h6">Tên danh mục:</label>
                 <input v-model="category.name" type="text" class="form-control"

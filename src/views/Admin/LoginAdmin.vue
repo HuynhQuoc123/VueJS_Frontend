@@ -47,14 +47,11 @@ import axios from 'axios';
     },
     methods:{
         async handle(){
-            // alert("hello")
             const res = await axios.post("loginAdmin", this.user)
             console.log(res.data)
                 if(res.data.success){
-                    this.$swal.fire('Đăng nhập thành công!','','success');
                     localStorage.setItem('tokenAdmin', res.data.token);
-		            this.$store.dispatch('admin', res.data); 
-                    this.$router.push({name: 'dashboard'});
+                    this.$router.push({name: 'dashboard'})
                 }
             
         }

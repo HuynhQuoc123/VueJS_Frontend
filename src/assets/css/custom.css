@@ -1,7 +1,10 @@
+@import "https://fonts.googleapis.com/css2?family=Roboto:wght@200;300;400;500;600;700;800&display=swap";
 *{
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box in !important;
+	box-sizing: border-box !important;
+    font-family: Roboto, sans-serif;
+    /* font-family: ; */
 }
 a{
 	text-decoration: none;
@@ -69,9 +72,6 @@ a:hover{
 }
 
 /*card*/
-.card {
-    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px;
-}
 
 .card {
     position: relative;
@@ -83,6 +83,8 @@ a:hover{
     background-clip: border-box;
     border: 0 solid rgba(0,0,0,.125);
     border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px;
+
 }
 
 .card-body {
@@ -90,4 +92,33 @@ a:hover{
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     padding: 1.5rem 1.5rem;
+}
+
+
+
+.modal {
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    width: 50%;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }

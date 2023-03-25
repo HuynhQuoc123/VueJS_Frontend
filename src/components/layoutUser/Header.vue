@@ -11,8 +11,6 @@
                         <RouterLink class="menu-item  px-3" :to="{name: 'products'}">Sản phẩm</RouterLink>
 
                         <RouterLink class="menu-item " to="/">Giới thiệu</RouterLink>
-                        
-    
                     </div>
                     <div class="icon d-flex align-items-center">
                         <div class="cart-wrap px-2">
@@ -23,6 +21,7 @@
                                 <h5 class="cart-heading">
                                         Sản phẩm đã thêm
                                 </h5>
+
                             
 
                                 <ul class="cart-list-items" v-if="carts.length >0">
@@ -32,12 +31,12 @@
                                                 <div class="cart-item">
                                                     <h6 class="cart-item-name">{{ cart.productName }}</h6>
                                                     <div class="cart-item-price-wrap pt-2">
-                                                        <span class="cart-item-price">{{ cart.productPrice }}</span>
+                                                        <span class="cart-item-price">{{ formatPrice(cart.productPrice) }}</span>
                                                         <span class="cart-item-multiply mx-1">X</span>
                                                         <span class="cart-item-qnt">{{ cart.quantity }}</span>
 
-                                                        <div>
-                                                            <a href="javascript:void(0)" @click="deleteCart(cart.id)">Xóa</a>
+                                                        <div >
+                                                            <a href="javascript:void(0)" @click="deleteCart(cart.id)" class="pointer">Xóa</a>
                                                         </div>
                                                     </div>
                                                 </div>                                    
@@ -54,7 +53,7 @@
                                 </div>
                                 
                                 <div v-if="carts.length >0" class="cart-btn text-center pt-1">
-                                        <RouterLink class="btn btn-dark mt-2 mb-3" :to="{name: 'carts', params: {carts: carts}}">
+                                        <RouterLink class="btn btn-dark mt-2 mb-3" to="/carts">
                                             Xem giỏ hàng
                                         </RouterLink>
                                 </div>
@@ -92,7 +91,8 @@ import axios from 'axios';
 export default{
     data(){
         return{
-            carts : [],
+            // carts : [],
+            user: []
         }
     },
   
@@ -104,41 +104,53 @@ export default{
 
             }
             })
-            this.$store.dispatch('user', res.data);  
-            this.getCart(res.data);
-    
-
+            this.$store.dispatch('user', res.data);                
+            this.user = res.data
         }      
+        this.getCart(this.user);
     },
 
+
+    
+
     methods:{
+
         LogOut(){
             localStorage.removeItem('tokenUser');
             this.$store.dispatch('user', null);
-            this.$router.push('login')
+            this.$router.push('/login')
 
         },
         async getCart(user){
-            await axios.get(`cart/${user.id}`).then(res=>{
-                this.carts = res.data
+            await axios.get(`cart/${user.id}`).then(res=>{               
+                this.$store.commit('addToCart', res.data);                       
 
-                this.$store.dispatch('addProductToCart', res.data);                
             })
         },
+        updateCart(){
+            console.log(update-cart)
+        },
+
         getImage(image){
             return 'http://127.0.0.1:8000/storage/uploads/products/'+image;
         },
         deleteCart(idCart){
             axios.delete(`cart/${idCart}`).then(res=>{
                 if(res.data.success){
-                    alert('hello')
-
+                    this.getCart(this.user);                 
                 }
             })
-        }
+        },
+        formatPrice(value) {
+            let val = (value / 1).toFixed(0).replace('.', ',');
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        },
     },
     computed:{
         ...mapGetters(['user']),    
+        ...mapGetters(['carts']),    
+
+   
     }
 }
 </script>

@@ -18,13 +18,13 @@
                 </div>
             </div>
             <div class="col-9">
-                <div v-for="(order, index) in orders" class="card mt-3 p-3">
+                <div v-for="(order, index) in orders" class="card mt-4 p-3">
 
                     <div class="d-flex justify-content-between">
-                        <div>Mã đơn hàng: DH{{ order.id}}</div>
+                        <div class="h6 m-0">Mã đơn hàng: DH{{ order.id}}</div>
                         <div>
                             Trạng thái:
-                            <span>{{ order.payments }} - </span>
+                            <span class="">{{ order.payments }} - </span>
                             <span v-if="order.status == 0">Chờ xử lý</span>
                             <span v-if="order.status == 1">Đang giao hàng</span>
                         </div>
@@ -46,7 +46,9 @@
                         </div>              
                         <hr>
                     </div>
-                    Tổng tiền: {{ formatPrice(order.total) }}
+                    <h6 class="m-0 text-end">
+                        Tổng tiền: {{ formatPrice(order.total) }}
+                    </h6>
                 </div>  
             </div>
         </div>  

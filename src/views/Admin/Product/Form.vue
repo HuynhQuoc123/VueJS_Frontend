@@ -3,55 +3,72 @@
         <h3 class="mx-auto pb-2">Sản phẩm</h3>
         <!-- {{ product }} -->
         <form @submit.prevent="save()">
-           <div class="row mt-3">
-                <div class="form-group col-6">
-                    <label class="h6">Tên danh muc</label>
-                    <!-- <input type="text" v-model="product.id_category" class="form-control"/> -->
-                    <select class="form-select"  v-model="product.id_category">
-                        <option v-for="(category, index) in categories" :key="index" v-bind:value="category.id">
-                            {{ category.name }}
-                        </option>
-                    </select>
+           <div class="row mb-3">
+                <!-- col-left -->
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="h6">Tên danh muc</label>
+                        <select class="form-select"  v-model="product.id_category">
+                            <option v-for="(category, index) in categories" :key="index" v-bind:value="category.id">
+                                {{ category.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="h6">Tên sản phẩm</label>
+                        <input type="text" v-model="product.name" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="h6">Giá bán</label>
+                        <input type="text" v-model="product.import_price" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="h6">Giá bán</label>
+                        <input type="text" v-model="product.price" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-2 ">
+                        <label class="h6">Ảnh sản phẩm</label>
+                        <input type="file" class="d-block" @change="onImageChange"/>
+                    </div>
                 </div>
-                <div class="form-group col-6">
-                    <label class="h6">Tên nhà sản xuất</label>
-                    <!-- <input type="text" v-model="product.id_producer" class="form-control"/> -->
-                    <select class="form-select"  v-model="product.id_producer">
-                        <option v-for="(producer, index) in producers" :key="index" v-bind:value="producer.id">
-                            {{ producer.name }}
-                        </option>
-                    </select>
+                <!-- col-left -->
+
+                <!-- col-right -->
+                <div class="col-6 ">
+                    <div class="form-group">
+                        <label class="h6">Tên nhà sản xuất</label>
+                        <select class="form-select"  v-model="product.id_producer">
+                            <option v-for="(producer, index) in producers" :key="index" v-bind:value="producer.id">
+                                {{ producer.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="h6">Số lượng sản phẩm</label>
+                        <input type="text" v-model="product.quantity" class="form-control"/>
+                    </div>
+
+                    <div class="form-group mt-2">
+                        <label class="h6">Mô tả sản phẩm</label>
+                        <textarea v-model="product.describe" placeholder="Nhập văn bản có nhiều dòng" class="w-100 product-describe"></textarea>   
+                    </div>    
+
                 </div>
-           </div>
-            <div class="row mt-3">
-                <div class="form-group col-6">
-                    <label class="h6">Tên sản phẩm</label>
-                    <input type="text" v-model="product.name" class="form-control"/>
-                </div>
-                <div class="form-group col-6">
-                    <label class="h6">Số lượng sản phẩm</label>
-                    <input type="text" v-model="product.quantity" class="form-control"/>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="form-group col-6">
-                    <label class="h6">Giá nhập vào</label>
-                    <input type="text" v-model="product.import_price" class="form-control"/>
-                </div>
-                <div class="form-group col-6">
-                    <label class="h6">Giá bán</label>
-                    <input type="text" v-model="product.price" class="form-control"/>
-                </div>
-            </div>
-            <div class="form-group my-3">
-                <label class="h6">Ảnh sản phẩm</label>
-                <input type="file" class="d-block" @change="onImageChange"/>
-            </div>
+                <!-- col-right -->
+
+           </div>               
 
             <button className='btn btn-success' type="submit" >Save</button> &nbsp;
             <button type="reset" class="btn btn-danger">Cancel</button>
        
         </form>
+
+
 
     </div>
 </template>
@@ -70,6 +87,7 @@ import Swal from 'sweetalert2';
                     price:'',
                     quantity: '',
                     image: '',
+                    describe: ''
                 },
                 product:{
                     name: '',
@@ -79,6 +97,7 @@ import Swal from 'sweetalert2';
                     price:'',
                     quantity: '',
                     image: '',
+                    describe: ''
                 },
                 categories:[],
                 producers:[]
@@ -98,6 +117,7 @@ import Swal from 'sweetalert2';
                     axios.put(`products/${this.product.id}`, this.product).then(res => {
                         if(res.data.success){
                             this.$swal.fire('Đã sửa thành công!','','success');
+                            this.$router.push('/admin/products')
                         }
                     });
                 } 
@@ -182,6 +202,9 @@ import Swal from 'sweetalert2';
 
 .inputGroup :is(input:focus, input:valid) {
   border-color: rgb(150, 150, 200);
+}
+.product-describe{
+    height: 112px;
 }
 
 </style>

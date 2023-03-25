@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="col-2">
 
-                                        <span class="pointer text-primary px-4">Xóa</span>
+                                        <span  class="pointer text-primary px-4">Xóa</span>
                                     </div>
                                 </div>
 
@@ -103,7 +103,7 @@
                         <div class="row ">
                             <div class="col-4">Hình thức vận chuyển:</div>
                             <div class="col-4">Nhanh</div>
-                            <div class="col-4">{{ formatPrice(ship) }}</div>
+                            <div class="col-4">Miễn phí</div>
 
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                             </div>
                             <div class="col-4">
                                 <div>{{ formatPrice(this.total) }}</div>
-                                <div>{{ formatPrice(ship) }}</div>
+                                <div>Miễn phí</div>
                                 <div>{{ formatPrice(order.total) }}</div>
                                 <div class="mt-3 ">
                                     <button @click="handleClick(customer_id)" class="btn btn-black">Đặt hàng</button>
@@ -166,7 +166,7 @@ export default {
             showAddAddressModal: false,
             selectedContact: [],
             contacts: [],
-            ship: 55000,
+            // ship: 55000,
             total: 0,
             totalUSD: 0,
             customer_id: '',
@@ -274,7 +274,7 @@ export default {
             await axios.get(`cart/${user.id}`).then(res => {
                 this.order.carts = res.data
                 this.total = this.calculateTotal(this.order.carts);
-                this.order.total = this.total + this.ship;
+                this.order.total = this.total;
                 this.totalUSD = (this.total/23000).toFixed(2);
 
             })
@@ -313,6 +313,8 @@ export default {
             }
             return sum;
         },
+ 
+
     }
 }
 </script>

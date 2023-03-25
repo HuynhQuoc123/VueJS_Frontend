@@ -21,18 +21,6 @@ export default{
         Header,
         Footer
     },
-    mounted(){
-        // $(window).scroll(function () {
-        //     if($(this).scrollTop() ){
-        //         $('#mainnav').addClass('menu-home');
-        //         $('.menu-item').addClass('text-black');
-        //     } else{
-        //         $('#mainnav').removeClass('menu-home');
-        //         $('.menu-item').removeClass('text-black')
-
-        //     }
-        // });
-    }
 }
 
 
