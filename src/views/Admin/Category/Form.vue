@@ -72,11 +72,11 @@ export default {
             }
          
         },
-        getCategory(categoryId){
-                axios.get(`categories/${categoryId}`).then(res=>{
-                    this.category = res.data
-                })
-            },
+        getCategory(categoryId) {
+            axios.get(`categories/${categoryId}`).then(res => {
+                this.category = res.data
+            })
+        },
     }        
 }
 

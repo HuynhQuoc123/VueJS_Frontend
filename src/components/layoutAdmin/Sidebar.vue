@@ -12,18 +12,6 @@
 						<span class="text">Dashboard</span>
 					</RouterLink>
 			</li>
-			<li class="item" v-if="admin.id_role == 1">
-					<RouterLink to="/admin/employees" >
-						<i class="fa-solid fa-users px-3"></i>
-						<span class="text">Nhân viên</span>
-					</RouterLink>
-			</li>
-			<li class="item" v-else @click="hanldeClick()">
-				<a href="javascript:void(0)">
-					<i class="fa-solid fa-truck px-3"></i>
-					<span class="text">Nhân viên</span>
-				</a>
-			</li>
 			<li class="item">
 					<RouterLink to="/admin/producers" >
 						<i class="fa-solid fa-truck px-3"></i>
@@ -48,21 +36,22 @@
 					<span class="text">Đơn hàng</span>
 				</RouterLink>
 			</li>
-		</ul>
-		<ul class="side-menu p-0">
+
 			<li class="">
-				<a href="#" class="">
+				<RouterLink to="/admin/roles" >
 					<i class="fa-solid fa-gear px-3"></i>
-					<span class="text">Settings</span>
-				</a>
+					<span class="text">Quản lý vai trò</span>
+				</RouterLink>
 			</li>
-			<li>
-				<a href="#" class="logout">
-                    <i class="fa-solid fa-backward px-3"></i>
-                    <span class="text" @click="logOut()">Logout</span>
-				</a>
-			</li>
+			<li class="">
+				<RouterLink to="/admin/employees" >
+					<i class="fa-solid fa-users px-3"></i>
+					<span class="text">Quản lý nhân viên</span>
+				</RouterLink>
+			</li>				
+								
 		</ul>
+		
 	</section>
 
 	<!-- SIDEBAR -->
@@ -74,12 +63,13 @@ import axios from "axios";
 export default{
 	data(){
 		return{
-			admin: []
+			admin: [],
+			showMenu: false
 		}
 	},
 	async created(){
         if(localStorage.getItem('tokenAdmin') != null){
-            const res = await axios.get('user',{
+            const res = await axios.get('',{
             headers:{
                 Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
 
@@ -92,19 +82,8 @@ export default{
             
         }      
     },
-	
-	methods:{
-		logOut(){
-            localStorage.removeItem('tokenAdmin');
-            this.$store.dispatch('admin', null);
 
-        },
-		hanldeClick(){
-			// alert('Hãy đăng nhập bằng tài khoản Admin');
-			this.$swal.fire('Hãy đăng nhập bằng tài khoản Admin')
 
-		}
-	}
 }
 
 </script>
@@ -143,5 +122,7 @@ a.router-link-active::after{
 a:hover{
 	color: black !important;
 }
+
+
 </style>
 

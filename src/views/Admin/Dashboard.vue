@@ -100,7 +100,7 @@ export default{
 			})
 		},
 		async getEmployees(){
-            await axios.get('allEmployee').then(res=>{
+            await axios.get('employees').then(res=>{
                 this.employees = res.data;
              
             })

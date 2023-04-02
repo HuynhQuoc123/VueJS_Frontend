@@ -15,7 +15,7 @@
                 <tr>
                     <th style="width: 30px;">STT</th>
                     <th>Tên danh mục</th>
-                    <th style="width: 250px;">Tùy chọn</th>
+                    <th style="width: 350px;">Tùy chọn</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,14 +23,14 @@
                     <td>{{ index+1 }}</td>
                     <td>{{ category.name }}</td>
                     <td>
-                        <button class="btn btn-warning mr-1">
-                            <RouterLink class="text-a" :to="{name: 'category.edit', params: {id: category.id}}">
-                                <i class="fa-solid fa-pen pr-1"></i>
-                                Edit
-                            </RouterLink>
-                        </button>
+                        <RouterLink class="text-a" :to="{name: 'category.edit', params: {id: category.id}}">
+                            <button class="btn btn-warning mr-1">
+                                <i class="fa-solid fa-pen px-1"></i>
+                                Chỉnh sửa
+                            </button>
+                        </RouterLink>
                         &nbsp
-                        <button class="btn btn-danger"  @click="onDelete(category.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
+                        <button class="btn btn-danger"  @click="onDelete(category.id)"><i class="fa-sharp fa-solid fa-trash px-1"></i>Xóa</button>
                     </td>
                 </tr>
             </tbody>
@@ -42,16 +42,27 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-
+import { mapGetters } from 'vuex'
 export default{
     name: 'CategoriesList',
     data(){
         return{
-            categories:[]
+            categories:[],
+			admin: []
+
         }
     },
-    created(){
+    async created(){
         this.getCategories();
+        if(localStorage.getItem('tokenAdmin') != null){
+            const res = await axios.get('admin',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
+
+            }
+		})		
+		    this.admin = res.data;            
+        }      
     },
     beforeUpdate(){
         $("#myTable").DataTable().destroy();
@@ -85,27 +96,47 @@ export default{
             });
         },
         onDelete(categoryID){
-            this.$swal.fire({
-                title: 'Bạn có chắc chắn muốn xóa?',
-                icon: 'warning',
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Đồng ý',
-                cancelButtonText: 'Hủy',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`categories/${categoryID}`).then(res=>{
-                        if(res.data.success){
-                            this.$swal.fire('Đã xóa thành công!','','success');
-                            this.getCategories();
+            let permissionsArray = [];
+            this.admin.roles.forEach(element => {
+                permissionsArray.push(element.permissions);
+            });
+            let hasPermission = false;
+            
+            permissionsArray.forEach(permissions => {
+                hasPermission = permissions.some(permission => permission.id === 8);
+                if (hasPermission) {
+                    this.$swal.fire({
+                        title: 'Bạn có chắc chắn muốn xóa?',
+                        icon: 'warning',
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios.delete(`categories/${categoryID}`).then(res => {
+                                if (res.data.success) {
+                                    this.$swal.fire('Đã xóa thành công!', '', 'success');
+                                    this.getCategories();
+                                }
+                            })
                         }
+                    })
+                } else {
+                    this.$swal.fire({
+                        icon: 'error',
+                        title: 'Bạn không có quyền xóa!',
                     })
                 }
             })
-        }      
+    
+        },  
    
+    },
+    computed:{
+        ...mapGetters(['admin']),    
     }
 }
 </script>

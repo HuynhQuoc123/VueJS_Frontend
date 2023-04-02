@@ -34,18 +34,17 @@
 
                     </td>
                     <td >
-                        <button class="btn btn-warning">
-                            <RouterLink class="text-a" :to="{name: 'product.edit', params: {id: product.id}}">
-                                <i class="fa-solid fa-pen pr-1"></i>
-                                
-                            </RouterLink>
-                        </button>                        
+                        <RouterLink class="text-a" :to="{name: 'product.edit', params: {id: product.id}}">
+                            <button class="btn btn-warning">
+                                <i class="fa-solid fa-pen pr-1"></i>                                
+                            </button>                        
+                        </RouterLink>
                         <button class="btn btn-danger mx-1"  @click="onDelete(product.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i></button>
-                        <button class="btn btn-secondary">
-                            <RouterLink :to="{name: 'admin.product.detail', params: {id: product.id}}">
+                        <RouterLink :to="{name: 'admin.product.detail', params: {id: product.id}}">
+                            <button class="btn btn-secondary">
                             <i class="fa-solid fa-eye"></i>
-                            </RouterLink>
-                        </button>
+                            </button>
+                        </RouterLink>
                     </td>
                 </tr>
             </tbody>
@@ -62,11 +61,21 @@ export default{
     data(){
         return {
             products: [],
+            admin : []
            
         }
     },
-    created(){
+    async created(){
         this.getProducts();
+        if(localStorage.getItem('tokenAdmin') != null){
+            const res = await axios.get('admin',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
+
+            }
+		})		
+		    this.admin = res.data;            
+        }   
     },
   
     beforeUpdate(){
@@ -101,23 +110,39 @@ export default{
                 }, 100);
             })
         },
-        onDelete(productID){
-            this.$swal.fire({
-                title: 'Bạn có chắc chắn muốn xóa?',
-                icon: 'warning',
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Đồng ý',
-                cancelButtonText: 'Hủy',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`products/${productID}`).then(res=>{
-                        if(res.data.success){
-                            this.$swal.fire('Đã xóa thành công!','','success');
-                            this.getProducts();
+        onDelete(productID) {
+            let permissionsArray = [];
+            this.admin.roles.forEach(element => {
+                permissionsArray.push(element.permissions);
+            });
+            let hasPermission = false;
+
+            permissionsArray.forEach(permissions => {
+                hasPermission = permissions.some(permission => permission.id === 12);
+                if (hasPermission) {
+                    this.$swal.fire({
+                        title: 'Bạn có chắc chắn muốn xóa?',
+                        icon: 'warning',
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios.delete(`products/${productID}`).then(res => {
+                                if (res.data.success) {
+                                    this.$swal.fire('Đã xóa thành công!', '', 'success');
+                                    this.getProducts();
+                                }
+                            })
                         }
+                    })
+                } else {
+                    this.$swal.fire({
+                        icon: 'error',
+                        title: 'Bạn không có quyền xóa!',
                     })
                 }
             })

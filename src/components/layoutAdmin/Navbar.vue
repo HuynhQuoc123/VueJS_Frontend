@@ -16,11 +16,25 @@
 		<!-- <a href="#" class="profile">
 			<i class="fa-solid fa-user"></i>
 		</a> -->
-		<b>
-			<i>
-				Hello, {{ admin.name }}
-			</i>
-		</b>
+	
+		<div class="dropdown">
+			<div class="pointer"  data-bs-toggle="dropdown">
+				<b>
+					<i>
+						{{ admin.name }}
+					</i>			
+				</b>
+			</div>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+				<li @click="logOut()">
+					<a href="#" class="logout dropdown-item">
+						<i class="fa-solid fa-backward px-3"></i>
+						<span class="text" >Đăng xuất</span>
+					</a>
+				</li>
+		
+			</ul>
+		</div>
 	</nav>
 
 	
@@ -40,16 +54,25 @@ export default{
 	},
 	async created(){
         if(localStorage.getItem('tokenAdmin') != null){
-            const res = await axios.get('user',{
+            const res = await axios.get('admin',{
             headers:{
                 Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
 
             }
 		})		
+		this.$store.dispatch('admin', res.data);                
 		this.admin = res.data;
+
             
         }      
     },
+	methods:{
+		logOut(){
+            localStorage.removeItem('tokenAdmin');
+            this.$store.dispatch('admin', null);
+
+        },
+	}
 }
 </script>
 

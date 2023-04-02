@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div class="container-md pb-5">
         <div class="row mt-4">
             <div class="col-xl-3 col-lg-4 col-md-5 mt-3">
@@ -33,6 +33,20 @@
                 </div>
             </div>
             <div class="col-xl-9 col-lg-8 col-md-7">
+                <form @submit.prevent="searchProducts" class="input-group mt-3 mb-1">
+                  <input type="text" class="form-control"  placeholder="Tìm kiếm sản phẩm" v-model="searchTerm">
+                  <button type="submit" class="py-2 px-4 border rounded-end pointer">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+                <!-- <form class="input-group mt-3 mb-1">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" v-model="searchTerm" @input="searchProducts">
+                    <button type="button" class="py-2 px-4 border rounded-end pointer" @click="searchProducts">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form> -->
+
+
                 <div class="row">
                     <div class="col-xl-4 col-lg-4 col-md-6" v-for="(product, index) in  displayedProducts" :key="index">
                         <div class="product-item mt-3">
@@ -130,6 +144,8 @@ export default {
             },
             currentPage: 1,
             itemsPerPage: 6,
+            searchTerm: '',
+
 
 
         }
@@ -147,6 +163,7 @@ export default {
         },
         ...mapGetters(['user']),
 
+
     },
 
     created() {
@@ -155,6 +172,31 @@ export default {
         this.getProducer();
     },
     methods: {
+        searchProducts() {
+            if (this.searchTerm === '') {
+                // Nếu người dùng không nhập từ khóa tìm kiếm, hiển thị lại toàn bộ sản phẩm
+                this.currentPage = 1;
+                this.getProducts();
+                return;
+            }
+            // Lọc danh sách sản phẩm theo từ khóa tìm kiếm
+            const filteredProducts = this.products.filter(product => {
+                return product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+            });
+            //Nếu không tìm thấy sản phẩm nào, hiển thị thông báo
+              if (filteredProducts.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Không tìm thấy sản phẩm',
+                        text: `Không tìm thấy sản phẩm nào phù hợp với từ khóa "${this.searchTerm}"`
+                    });
+                    this.searchTerm = '';
+                    return;
+            }
+            // Cập nhật danh sách sản phẩm và đưa trang về đầu tiên
+            this.products = filteredProducts;
+            this.currentPage = 1;
+        },
         getProducts() {
             axios.get('products').then(res => {
                 this.products = res.data;
@@ -191,7 +233,6 @@ export default {
             })
         },     
         async addToCart(productID) {
-            console.log(this.user.id)
             if (localStorage.getItem('tokenUser') == null) {
                 this.$router.push({ name: 'login' });
             }

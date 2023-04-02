@@ -13,7 +13,7 @@
                     <th>Tên nhà sản xuất</th>
                     <th>Số điện thoại</th>
                     <th>Email</th>
-                    <th>Tùy chọn</th>
+                    <th style="width: 300px;">Tùy chọn</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,14 +23,14 @@
                     <td>{{ producer.phone }}</td> 
                     <td>{{ producer.email }}</td> 
                     <td>
-                        <button class="btn btn-warning mr-1">
-                            <RouterLink class="text-a" :to="{name: 'producer.edit', params: {id: producer.id}}">
+                        <RouterLink class="text-a" :to="{name: 'producer.edit', params: {id: producer.id}}">
+                            <button class="btn btn-warning mr-1">
                                 <i class="fa-solid fa-pen pr-1"></i>
-                                Edit
-                            </RouterLink>
-                        </button>
+                                Chỉnh sửa
+                            </button>
+                        </RouterLink>
                         &nbsp
-                        <button class="btn btn-danger"  @click="onDelete(producer.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Delete</button>
+                        <button class="btn btn-danger"  @click="onDelete(producer.id)"><i class="fa-sharp fa-solid fa-trash pr-1"></i>Xóa</button>
                     </td>
                 </tr>
             </tbody>
@@ -47,11 +47,21 @@ export default{
     name: 'ProducerList',
     data(){
         return{
-            producers: []
+            producers: [],
+            admin: [],
         }
     },
-    created(){
+    async created(){
         this.getProducers();
+        if(localStorage.getItem('tokenAdmin') != null){
+            const res = await axios.get('admin',{
+            headers:{
+                Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
+
+            }
+		})		
+		    this.admin = res.data;            
+        }      
     },
     beforeUpdate(){
 
@@ -83,26 +93,43 @@ export default{
             });
         },
 
-        onDelete(producerID){
-            this.$swal.fire({
-                title: 'Bạn có chắc chắn muốn xóa?',
-                icon: 'warning',
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Đồng ý',
-                cancelButtonText: 'Hủy',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`producers/${producerID}`).then(res=>{
-                        if(res.data.success){
-                            this.$swal.fire('Đã xóa thành công!','','success');
-                            this.getProducers();
+        onDelete(producerID) {
+            let permissionsArray = [];
+            this.admin.roles.forEach(element => {
+                permissionsArray.push(element.permissions);
+            });
+            let hasPermission = false;
+
+            permissionsArray.forEach(permissions => {
+                hasPermission = permissions.some(permission => permission.id === 4);
+                if (hasPermission) {
+                    this.$swal.fire({
+                        title: 'Bạn có chắc chắn muốn xóa?',
+                        icon: 'warning',
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Đồng ý',
+                        cancelButtonText: 'Hủy',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            axios.delete(`producers/${producerID}`).then(res => {
+                                if (res.data.success) {
+                                    this.$swal.fire('Đã xóa thành công!', '', 'success');
+                                    this.getProducers();
+                                }
+                            })
                         }
+                    })
+                } else {
+                    this.$swal.fire({
+                        icon: 'error',
+                        title: 'Bạn không có quyền xóa!',
                     })
                 }
             })
+
         }
     }
 }

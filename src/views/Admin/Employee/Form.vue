@@ -19,11 +19,25 @@
                 <label class="h6">Mật khẩu</label>
                 <input v-model="employee.phone"  type="password" class="form-control"/>
             </div>
+            <div class="form-group my-3">
+                <h6 class="col-1 m-0">Vai trò: </h6>
+                <div class="d-flex mt-2">
+                    <div v-for="(role, index) in allRoles" :key="index" class="form-check col-2 pointer m-0" >
+                        <input class="form-check-input" v-model="roles" type="checkbox" :value="role.id" :id="role.name">
+                        <label class="form-check-label" :for="role.name">
+                            {{ role.name }}
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <button className='btn btn-success' type="submit" >Save</button> &nbsp;
             <button type="reset" class="btn btn-danger">Cancel</button>
        
         </form>    
+        {{ a }}
+
+
         
      </div>
     </div>
@@ -41,19 +55,60 @@ export default {
                 email: '',
                 password: ''
             },
+            allRoles: [],
+            roles: []
         }
     }, 
+    created(){
+        this.getRoles();
+        let employeeId = this.$route.params.id;
+        if(employeeId){
+            this.getEmployee(employeeId);
+        }
+    },
     methods:{
         save(){
-            axios.post('registerAdmin', this.employee).then(res=>{
+            if(this.employee.id){
+                axios.put(`employees/${this.employee.id}`, this.employee).then(res=>{
                 if(res.data.success){
-                    this.$router.push({name: 'employees'})
-                    this.$swal.fire('Đã thêm thành công!','','success');
+                    console.log(this.roles)
+                    axios.put(`users/${this.employee.id}/roles`, {roles: this.roles}).then(response=>{
+                        if(response.data.success){
+                            this.$router.push({name: 'employees'})
+                            this.$swal.fire('Đã sửa thành công!','','success');
+                        }
+                    })
                 }
             });
+            } else{
+                axios.post('employees', this.employee).then(res=>{
+                if(res.data.success){
+                    axios.post(`users/${res.data.id}/roles`, {roles: this.roles}).then(response=>{
+                        if(response.data.success){
+                            this.$router.push({name: 'employees'})
+                            this.$swal.fire('Đã thêm thành công!','','success');
+                        }
+                    })
+                }
+            });
+            }
+
         },
         setPassword(){
             this.employee.password = this.employee.phone
+        },
+        async getRoles(){
+            await axios.get('roles').then(res=>{
+                this.allRoles = res.data;
+            })
+        },
+        async getEmployee(employeeId){
+            await axios.get(`employees/${employeeId}`).then(res=>{
+                this.employee = res.data
+                res.data.roles.forEach(e => {
+                    this.roles.push(e.id)
+                });
+            })
         }
 
     }

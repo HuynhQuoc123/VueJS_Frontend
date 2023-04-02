@@ -1,14 +1,12 @@
 <template>
-    <div v-if="admin.id_role == 1">
+    <div>
         <h2 class="text-center pt-5 pb-3">Danh sách nhân viên</h2>
         <div class="px-5">
-
             <button class="btn-black mb-4">
                 <RouterLink to="/admin/employee/create"><i class="fa-sharp fa-solid fa-plus pr-1"></i>
                     Thêm nhân viên
                 </RouterLink>
             </button>
-
 
             <table class="myTable table table-bordered bg-white table-striped table-hover ">
                 <thead class="">
@@ -16,17 +14,36 @@
                         <th>Tên nhân viên</th>
                         <th>Số điện thoại</th>
                         <th>Email</th>
-                        <th>Vai trò</th>
+                        <th style="width: 250px;">Vai trò</th>
+                        <th>Tùy chọn</th>
                     </tr>
                 </thead>
+                
+                
                 <tbody>
                     <tr v-for="(employee, index) in employees" :key="index">
                         <td>{{ employee.name }}</td>
                         <td>{{ employee.phone }}</td>
                         <td>{{ employee.email }}</td>
+                        <td >
+                            <span v-for="(role, i) in employee.roles" :key="i" class="bg-primary rounded text-white px-2 py-1 ">                            
+                                {{ role.name }}
+                            </span>
+                        </td>
                         <td>
-                            <span v-if="employee.id_role == 1">Admin</span>
-                            <span v-else>Nhân viên</span>
+                            <RouterLink class="text-a" :to="{name: 'employee.edit', params: {id: employee.id}}">
+                                <button class="btn btn-warning mr-1">
+                                    <i class="fa-solid fa-pen px-1"></i>
+                                    Chỉnh sửa
+                                </button>
+                            </RouterLink>
+                            &nbsp   
+                            <button @click="blocked(employee.id)" v-if="employee.blocked" class="btn btn-success">
+                                Khóa
+                            </button>  
+                            <button @click="blocked(employee.id)" v-else class="btn  btn-danger">
+                                Mở khóa
+                            </button>               
                         </td>
                     </tr>
                 </tbody>
@@ -39,13 +56,12 @@
 
 <script>
 import axios from 'axios';
-import $ from 'jquery';
 export default {
     name: 'EmployeesList',
     data(){
         return{
             employees:[],
-			admin: []
+			admin: [],
 
         }
     },
@@ -61,14 +77,19 @@ export default {
 		this.admin = res.data;
     }
     },
-
     methods:{
+        blocked(id){
+            axios.delete(`employees/${id}`).then(res=>{
+                if(res.data.success){
+                    this.getEmployees()
+                }
+            })
+        },
         async getEmployees(){
-            await axios.get('allEmployee').then(res=>{
+            await axios.get('employees').then(res=>{
                 this.employees = res.data;
-                setTimeout(() => {
-                    $("#myTable").DataTable();
-                }, 100)
+                console.log(this.employees)
+               
             })
         }
     }

@@ -52,6 +52,8 @@ import axios from 'axios';
                 if(res.data.success){
                     localStorage.setItem('tokenAdmin', res.data.token);
                     this.$router.push({name: 'dashboard'})
+                } else{
+                    alert(res.data.message)
                 }
             
         }

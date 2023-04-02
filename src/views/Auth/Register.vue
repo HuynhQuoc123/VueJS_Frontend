@@ -2,6 +2,9 @@
     <div class="wrapper">
         <div class="container main">
             <div class="row">
+                <div class="col-md-6 side-image">
+             
+                </div>
                 <div class="col-md-6 right">
                     <form @submit.prevent="handle()" class="input-box">
                         <header>Đăng ký</header>
@@ -37,9 +40,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-6 side-image">
              
-                </div>
              
             </div>
         </div>

@@ -41,8 +41,7 @@
                                                     </div>
                                                 </div>                                    
                                             </div>
-                                        </li>                           
-                                        
+                                        </li>                        
                                         
                                         
                             
@@ -69,12 +68,12 @@
                             </div>
 
                             <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item" v-if="user" href="#">{{ user.name }}</a></li>
-                                <li><RouterLink class="dropdown-item" to="/orderList" v-if="user" >Đơn mua</RouterLink></li>
-                                <li><a class="dropdown-item" v-if="user" href="javascript:void(0)" @click="LogOut()">Đăng xuất</a></li>
-                                <li><RouterLink class="dropdown-item" to="/register" v-if="!user" >Đăng ký</RouterLink></li>
-                                <li><RouterLink class="dropdown-item" to="/login" v-if="!user" >Đăng nhập</RouterLink></li>
-
+                                
+                                <li><a class="dropdown-item" v-if="user.length != 0" href="#">{{ user.name }}</a></li>
+                                <li><RouterLink class="dropdown-item" to="/orderList" v-if="user.length != 0" >Đơn mua</RouterLink></li>
+                                <li><a class="dropdown-item" v-if="user.length != 0" href="javascript:void(0)" @click="LogOut()">Đăng xuất</a></li>
+                                <li><RouterLink class="dropdown-item" to="/register" v-if="user.length == 0" >Đăng ký</RouterLink></li>
+                                <li><RouterLink class="dropdown-item" to="/login" v-if="user.length == 0" >Đăng nhập</RouterLink></li>
                             </ul>
                         </div>
                     </div>
@@ -91,7 +90,6 @@ import axios from 'axios';
 export default{
     data(){
         return{
-            // carts : [],
             user: []
         }
     },
@@ -101,13 +99,12 @@ export default{
             const res = await axios.get('user',{
             headers:{
                 Authorization: 'Bearer ' + localStorage.getItem('tokenUser')
-
             }
             })
             this.$store.dispatch('user', res.data);                
             this.user = res.data
         }      
-        this.getCart(this.user);
+            this.getCart(this.user);
     },
 
 

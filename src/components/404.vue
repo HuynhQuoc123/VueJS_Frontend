@@ -8,9 +8,9 @@
                            <h1 class="text-center">404</h1>
                        </div>
                        <div class="content_box_404">
-                           <h3 class="h2">Looks Like You're Lost</h3>
-                           <p>The page you are looking for not available</p>
-                           <RouterLink to="/">Go to Home</RouterLink>
+                           <h3 >Có vẻ bạn đang lạc</h3>
+                           <p>Trang bạn tìm kiếm không tồn tại</p>
+                           <RouterLink to="/">Trở về</RouterLink>
                        </div>
                    </div>
                </div>
@@ -42,7 +42,7 @@ h1
 
 h3
 {
-    font-size: 80px;
+    font-size: 50px;
 }
 
 a
