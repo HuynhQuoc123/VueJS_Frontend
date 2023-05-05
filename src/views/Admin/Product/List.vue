@@ -16,7 +16,7 @@
                     <th >Giá bán</th>
                     <th >Số lượng</th>
                     <th>Hình ảnh</th>
-                    <th style="width: 170px;">Tùy chọn</th>
+                    <th style="width: 200px;">Tùy chọn</th>
                     
                 </tr>
             </thead>

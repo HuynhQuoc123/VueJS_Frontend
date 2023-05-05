@@ -58,7 +58,6 @@
 					</span>
 				</li>
 			</ul>
-		
 	
 		</main>
 		<!-- MAIN -->
@@ -66,6 +65,8 @@
 
 <script>
 import axios from 'axios';
+import {mapGetters} from 'vuex'
+
 
 export default{
 	data(){
@@ -78,12 +79,14 @@ export default{
 			importPrice: null,
 		}
 	},
-	created(){
-        this.getOrder()
-		this.getProducts()
-		this.getEmployees()
-		this.getCustomers()
-	
+	async created(){
+        this.getOrder();
+		this.getProducts();
+		this.getEmployees();
+		this.getCustomers();
+		
+
+     
 
 	},
 	methods:{
@@ -134,7 +137,12 @@ export default{
 
 
 		
-	}
+	},
+	computed:{
+        ...mapGetters(['admin']),    
+
+   
+    }
 	
 
 }

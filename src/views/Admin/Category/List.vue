@@ -3,7 +3,7 @@
 
     <div class="px-5">
 
-        <button class="btn-black mb-4">
+        <button  class="btn-black mb-4">
             <RouterLink to="/admin/category/create" ><i class="fa-sharp fa-solid fa-plus pr-1"></i>
                 Thêm danh mục 
             </RouterLink>
@@ -36,34 +36,38 @@
             </tbody>
         </table>
 
+       
     </div>
 </template>
 
 <script>
 import axios from 'axios'
 import $ from 'jquery'
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
+
 export default{
     name: 'CategoriesList',
     data(){
         return{
             categories:[],
-			admin: []
-
+			admin: [],
         }
     },
     async created(){
         this.getCategories();
+        
         if(localStorage.getItem('tokenAdmin') != null){
             const res = await axios.get('admin',{
-            headers:{
-                Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
-
-            }
-		})		
+                headers:{
+                    Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
+                    
+                }
+            })		
 		    this.admin = res.data;            
-        }      
+        }  
+
     },
+
     beforeUpdate(){
         $("#myTable").DataTable().destroy();
 
@@ -136,8 +140,9 @@ export default{
    
     },
     computed:{
-        ...mapGetters(['admin']),    
+        ...mapGetters(['admin']),   
     }
+  
 }
 </script>
 

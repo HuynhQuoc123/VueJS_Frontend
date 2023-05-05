@@ -297,7 +297,7 @@ router.beforeEach(async (to, from, next) => {
               }
           })
           if (!hasPermission) {              
-            next({ name: 'dashboard' });    
+            next({ name: '403' });    
             return;
           }
         } catch (error) {

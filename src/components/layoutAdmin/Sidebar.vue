@@ -1,15 +1,15 @@
 <template>
     <!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="/admin/dashboard" class="brand">
+		<a href="/admin/dashboard" class="brand mt-2">
             <i class="fa-solid fa-face-smile px-4"></i>
-            <span class="text">MyShop</span>
+            <span class="text">CanTho Shop</span>
 		</a>
 		<ul class="side-menu top p-0">
 			<li class="item">
 					<RouterLink to="/admin/dashboard">
 						<i class="fa-sharp fa-solid fa-gauge px-3"></i>
-						<span class="text">Dashboard</span>
+						<span class="text">Tổng quan</span>
 					</RouterLink>
 			</li>
 			<li class="item">

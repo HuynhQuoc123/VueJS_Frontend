@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="text-center pt-5 pb-3">Quản lý nhóm vai trò</h2>
+        <h2 class="text-center pt-5 pb-3">Quản lý vai trò</h2>
         <div class="px-5">
             <button class="btn-black mb-4">
                 <RouterLink to="/admin/role/create"><i class="fa-sharp fa-solid fa-plus pr-1"></i>

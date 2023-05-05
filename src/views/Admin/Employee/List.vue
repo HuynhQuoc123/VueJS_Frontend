@@ -48,7 +48,6 @@
                     </tr>
                 </tbody>
             </table>
-
         </div>
     </div>
 
@@ -68,7 +67,7 @@ export default {
    async created(){
         this.getEmployees();
         if(localStorage.getItem('tokenAdmin') != null){
-            const res = await axios.get('user',{
+            const res = await axios.get('admin',{
             headers:{
                 Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
 
@@ -78,10 +77,26 @@ export default {
     }
     },
     methods:{
-        blocked(id){
-            axios.delete(`employees/${id}`).then(res=>{
-                if(res.data.success){
-                    this.getEmployees()
+        blocked(id) {
+            let permissionsArray = [];
+            this.admin.roles.forEach(element => {
+                permissionsArray.push(element.permissions);
+            });
+            let hasPermission = false;
+
+            permissionsArray.forEach(permissions => {
+                hasPermission = permissions.some(permission => permission.id === 24);
+                if (hasPermission) {
+                    axios.delete(`employees/${id}`).then(res => {
+                        if (res.data.success) {
+                            this.getEmployees()
+                        }
+                    })
+                } else {
+                    this.$swal.fire({
+                        icon: 'error',
+                        title: 'Bạn không có quyền khóa tài khoản!',
+                    })
                 }
             })
         },

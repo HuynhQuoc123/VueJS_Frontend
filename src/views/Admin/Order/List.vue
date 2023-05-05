@@ -50,7 +50,7 @@ export default {
     async created(){
         this.getOrder()
         if(localStorage.getItem('tokenAdmin') != null){
-            const res = await axios.get('user',{
+            const res = await axios.get('admin',{
             headers:{
                 Authorization: 'Bearer ' + localStorage.getItem('tokenAdmin')
             }

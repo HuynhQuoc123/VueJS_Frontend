@@ -3,8 +3,10 @@
 		<i id="menuIcon" class="fa-sharp fa-solid fa-bars p-2"></i>
 		<form action="#">
 			<div class="form-input">
-				<input type="search" placeholder="Search...">
-				<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+				<input type="search" placeholder="Tìm kiếm...">
+				<button type="submit" class="search-btn px-2">                        
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
 			</div>
 		</form>
 		<!-- <input type="checkbox" id="switch-mode" hidden>
